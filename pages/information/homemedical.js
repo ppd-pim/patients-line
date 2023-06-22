@@ -10,20 +10,21 @@ export default function Homemedical(props) {
       const res = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
           "/PharConnect/api/LineUsers/homemedical/" +
-          props.phn,
+          // props.phn,
+          '64004451',
         {
           method: "GET",
         }
       );
 
-      //   const result = await res.json();
+        const result = await res.json();
 
-      //   if (result.status == "success") {
-      //     await sethomemedical(result.data);
-      //     // await sethomemedicalLoading(true);
-      //     console.log("appintment");
-      //     console.log(homemedicals);
-      //   }
+        if (result.status == "success") {
+          await setHomemedical(result.data);
+          // await sethomemedicalLoading(true);
+          console.log("homemedicals");
+          console.log(homemedicals);
+        }
     };
     fetchData();
   }, []);
@@ -49,8 +50,8 @@ export default function Homemedical(props) {
                   homemedicals.map(function (homemedical) {
                     return (
                       <tr>
-                        <td>{homemedical.homemedicalDttm}</td>
-                        <td>{homemedical.locationName}</td>
+                        <td>{homemedical.drugName}</td>
+                        <td>{homemedical.freeText1}, {homemedical.freeText2}</td>
                       </tr>
                     );
                   })

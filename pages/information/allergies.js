@@ -12,20 +12,21 @@ export default function Allergies(props) {
       const res = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
           "/PharConnect/api/LineUsers/allergybyhn/" +
-          props.phn,
+           "64004451",
+        //    props.phn,
         {
           method: "GET",
         }
       );
-
-    //   const result = await res.json();
-
-    //   if (result.status == "success") {
-    //     await setallergies(result.data);
-    //     // await setallergiesLoading(true);
-    //     console.log("appintment");
-    //     console.log(allergiess);
-    //   }
+      console.log(res.status);
+      if (res.status == 200) {
+        const result = await res.json();
+        if (result.status == "success") {
+          await setallergies(result.data);
+          console.log("allergiess");
+          console.log(allergiess);
+        }
+      }
     };
     fetchData();
   }, []);
@@ -42,9 +43,9 @@ export default function Allergies(props) {
             <Table responsive>
               <thead>
                 <tr>
-                  <th className="col-4">รูปแบบ</th>
-                  <th className="col-4">ชื่อยา</th>
-                  <th className="col-4">ประวัติแพ้ยา</th>
+                  <th className="col-3">รูปแบบ</th>
+                  <th className="col-3">ชื่อยา</th>
+                  <th className="col-6">ประวัติแพ้ยา</th>
                 </tr>
               </thead>
               <tbody>
@@ -52,8 +53,9 @@ export default function Allergies(props) {
                   allergiess.map(function (allergies) {
                     return (
                       <tr>
-                        <td>{allergies.allergiesDttm}</td>
-                        <td>{allergies.locationName}</td>
+                        <td>{allergies.allergyType}</td>
+                        <td>{allergies.allergicTo}</td>
+                        <td>{allergies.allergyDescription}</td>
                       </tr>
                     );
                   })

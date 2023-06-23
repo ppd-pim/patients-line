@@ -58,7 +58,7 @@ export default function Allergies(props) {
                 ) : (
                   <tr>
                     <td colSpan={3} className="text-center">
-                      ไม่มีข้อมูลประวัติแพ้
+                      ไม่มีข้อมูลประวัติแพ้ยา
                     </td>
                   </tr>
                 )}

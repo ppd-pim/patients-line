@@ -12,8 +12,8 @@ export default function Appointment(props) {
       const res = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
           "/PharConnect/api/LineUsers/appointment/" +
-          // props.phn,
-          '58007029',
+          props.phn,
+          // '58007029',
         {
           method: "GET",
         }

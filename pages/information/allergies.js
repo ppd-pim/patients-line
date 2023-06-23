@@ -12,8 +12,8 @@ export default function Allergies(props) {
       const res = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
           "/PharConnect/api/LineUsers/allergybyhn/" +
-           "64004451",
-        //    props.phn,
+          //  "64004451",
+            props.phn,
         {
           method: "GET",
         }

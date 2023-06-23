@@ -65,6 +65,7 @@ export default function Register(props) {
     if (result_qshc_verify.status === "success") {
       setProfile(result_qshc_verify);
       setwarning(false);
+      setBtnLoad(false);
       setModalOpen(!modalOpen);
     } else {
       setBtnLoad(false);
@@ -73,7 +74,6 @@ export default function Register(props) {
       } else {
         setMsgerror("เกิดข้อผิดพลาด");
       }
-      setwarning(true);
     }
   };
 

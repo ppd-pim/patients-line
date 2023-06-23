@@ -7,8 +7,6 @@ export default function Appointment(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("appoint" + props.phn);
-
       const res = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
           "/PharConnect/api/LineUsers/appointment/" +
@@ -22,9 +20,7 @@ export default function Appointment(props) {
       const result = await res.json();
 
       if (result.status == "success") {
-        await setAppointment(result.data);
-        console.log("appintment");
-        console.log(appointments);
+        await setAppointment(result.data);      
       }
     };
     fetchData();

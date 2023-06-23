@@ -18,7 +18,7 @@ export default function Home() {
       const res = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
           "/PharConnect/api/LineUsers/Verify/" +
-          uid+6,
+          uid,
         {
           headers: {
             // "Content-Type": "application/json",

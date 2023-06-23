@@ -6,7 +6,6 @@ export default function Homemedical(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("appoint" + props.phn);
       const res = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
           "/PharConnect/api/LineUsers/homemedical/" +
@@ -21,9 +20,7 @@ export default function Homemedical(props) {
 
         if (result.status == "success") {
           await setHomemedical(result.data);
-          // await sethomemedicalLoading(true);
-          console.log("homemedicals");
-          console.log(homemedicals);
+          
         }
     };
     fetchData();

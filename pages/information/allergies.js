@@ -7,8 +7,6 @@ export default function Allergies(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("appoint" + props.phn);
-
       const res = await fetch(
         process.env.NEXT_PUBLIC_API_URL +
           "/PharConnect/api/LineUsers/allergybyhn/" +
@@ -18,13 +16,11 @@ export default function Allergies(props) {
           method: "GET",
         }
       );
-      console.log(res.status);
       if (res.status == 200) {
         const result = await res.json();
         if (result.status == "success") {
           await setallergies(result.data);
-          console.log("allergiess");
-          console.log(allergiess);
+          
         }
       }
     };

@@ -278,3 +278,12 @@ a {
 kku-cookie-widget  {
     --primary-color:  #41729F;
 }
+
+.load-icon{
+    animation: rotate360 1s infinite linear
+}
+@keyframes rotate360 { 
+    100% {
+        transform: rotate(360deg);
+    }
+}

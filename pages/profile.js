@@ -82,7 +82,7 @@ export default function Register(props) {
               อายุ
             </Col>
             <Col xs={5} sm={6} md={6}>
-              999
+              999 ปี
             </Col>
           </Row>
           <Row>

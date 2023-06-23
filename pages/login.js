@@ -15,7 +15,11 @@ import Head from "next/head";
 import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart,
+  faCheckCircle,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import OtpInput from "react-otp-input";
 
 export default function Register(props) {
@@ -34,10 +38,11 @@ export default function Register(props) {
   const [step_otp, setSetp_otp] = React.useState(false);
   const [reff_otp, setReff_otp] = useState("");
   const [token_otp, setTeff_otp] = useState("");
+  const [btn_load, setBtnLoad] = React.useState(false);
 
   const registerUserQshc = async (event) => {
     event.preventDefault();
-
+    setBtnLoad(true);
     setBDdate(event.target.birth_date.value);
     const bd_date = event.target.birth_date.value.replaceAll("/", "");
     setSetp_otp(false);
@@ -62,6 +67,7 @@ export default function Register(props) {
       setwarning(false);
       setModalOpen(!modalOpen);
     } else {
+      setBtnLoad(false);
       if (result_qshc_verify.message == "Not Found Id Card No") {
         setMsgerror("เลขบัตรประจำตัวประชาชน หรือ วันเดือนปีเกิด ไม่ถูกต้อง");
       } else {
@@ -93,54 +99,60 @@ export default function Register(props) {
     });
 
     const result = await res.json();
-    if (result.result.status == true) {
-      setModalOTP(!modalOTP);
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + "/PharConnect/api/LineUsers/Register",
-        {
-          body: JSON.stringify({
-            idCardNo: profile.data.idCardNo,
-            birthDate: bd_date,
-            mobile: mobile,
-            uid: props.profile.userId,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-        }
-      );
+    if (result.code && result.code == "5000") {
+      setMsgerror("รหัส OPT นี้หมดอายุเเล้ว");
+      setwarningOTP(true);
+    } else if (result.result) {
+      if (result.result.status == true) {
+        setModalOTP(!modalOTP);
+        const res = await fetch(
+          process.env.NEXT_PUBLIC_API_URL +
+            "/PharConnect/api/LineUsers/Register",
+          {
+            body: JSON.stringify({
+              idCardNo: profile.data.idCardNo,
+              birthDate: bd_date,
+              mobile: mobile,
+              uid: props.profile.userId,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "POST",
+          }
+        );
 
-      const result = await res.json();
-      if (result.status === "success") {
-        if (result.message == "This Line User is already registed") {
-          setMsgerror("Line นี้เคยลงทะเบียนเเล้ว");
-          setwarning(true);
+        const result = await res.json();
+        if (result.status === "success") {
+          setBtnLoad(false);
+          if (result.message == "This Line User is already registed") {
+            setMsgerror("Line นี้เคยลงทะเบียนเเล้ว");
+            setwarning(true);
+          } else {
+            setModalOpensuccess(!modalSuccess);
+            setTimeout(() => setModalOpensuccess(modalSuccess), 3000);
+            const liff = (await import("@line/liff")).default;
+            liff.closeWindow();
+          }
         } else {
-          setModalOpensuccess(!modalSuccess);
-          setTimeout(() => setModalOpensuccess(modalSuccess), 3000);
-          const liff = (await import("@line/liff")).default;
-          liff.closeWindow();
+          setMsgerror("เกิดข้อผิดพลาด");
+          setwarningOTP(true);
         }
+      } else if (result.result.status == false) {
+        setMsgerror("รหัส OPT ไม่ถูกต้อง");
+        setwarningOTP(true);
       } else {
         setMsgerror("เกิดข้อผิดพลาด");
         setwarningOTP(true);
       }
-    } else if (result.result.status == false) {
-      setMsgerror("รหัส OPT ไม่ถูกต้อง");
-      setwarningOTP(true);
-    } else {
-      setMsgerror("เกิดข้อผิดพลาด");
-      setwarningOTP(true);
     }
   };
 
   const sendOTP = async (event) => {
     setOtp("");
+    setwarningOTP(false);
     event.preventDefault();
     setMobile(event.target.mobile.value);
-    setSetp_otp(true);
-    // ส่ง opt ถ้าผ่าน ไป api regis ถ้าไม่ แจ่งเตื่อน otp ไม่ถูกต้องงง
 
     const res = await fetch("https://portal-otp.smsmkt.com/api/otp-send", {
       body: JSON.stringify({
@@ -158,6 +170,7 @@ export default function Register(props) {
 
     const result = await res.json();
     if (result.code === "000") {
+      setSetp_otp(true);
       var obj = {};
       var res_otp = Object.keys(result).map(function (name) {
         obj[name] = result[name];
@@ -228,9 +241,19 @@ export default function Register(props) {
                 )}
 
                 <div className="text-center mt-2">
-                  <Button className="btn-primary" type="submit">
-                    ตรวจสอบข้อมูล
-                  </Button>
+                  {btn_load ? (
+                    <Button className="btn-primary" type="submit" disabled>
+                      <FontAwesomeIcon
+                        className="load-icon tx-16"
+                        icon={faSpinner}
+                      />{" "}
+                      ตรวจสอบข้อมูล
+                    </Button>
+                  ) : (
+                    <Button className="btn-primary" type="submit">
+                      ตรวจสอบข้อมูล
+                    </Button>
+                  )}
                 </div>
               </Form>
             </Col>
@@ -314,7 +337,7 @@ export default function Register(props) {
                   <div className="otp-block">
                     <Form.Group>
                       <p className=" mb-0">
-                        กรุณากรอกเลข OTP ที่ส่งไปยัง {mobile}
+                        กรุณากรอกเลข OTP ที่ส่งไปยัง ******{mobile.slice(-4)}
                       </p>
                       <div className="text-center">
                         <p className="mb-1 tx-14">(REF.CODE : {reff_otp})</p>

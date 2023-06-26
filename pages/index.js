@@ -21,7 +21,6 @@ export default function Home() {
           uid,
         {
           headers: {
-            // "Content-Type": "application/json",
           },
           method: "GET",
         }

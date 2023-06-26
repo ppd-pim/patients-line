@@ -27,7 +27,6 @@ export default function Register(props) {
   const [warningOTP, setwarningOTP] = useState(false);
   const router = useRouter();
   const [profile, setProfile] = useState({});
-
   const [modalOpen, setModalOpen] = React.useState(false);
   const [modalSuccess, setModalOpensuccess] = React.useState(false);
   const [modalOTP, setModalOTP] = React.useState(false);

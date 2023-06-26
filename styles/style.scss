@@ -188,6 +188,7 @@ a {
 
     .text-title {
         font-size: 1rem;
+        font-weight: bold;
     }
 
     .detail {
@@ -286,4 +287,8 @@ kku-cookie-widget  {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.fw-b{
+    font-weight: bold !important;
 }

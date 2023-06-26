@@ -39,7 +39,7 @@ export default function Register(props) {
       <div className="card card-header-p">
         <Row className="justify-content-md-center p-2">
           <Col span={12} className="text-center">
-            <h3 className="mb-0">ข้อมูลผู้ป่วย</h3>
+            <h3 className="mb-0 fw-b">ข้อมูลผู้ป่วย</h3>
           </Col>
         </Row>
       </div>
